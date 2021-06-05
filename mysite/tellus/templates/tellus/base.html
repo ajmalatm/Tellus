@@ -1,0 +1,73 @@
+{% extends 'tellus/mainbase.html' %}
+
+{% block content2 %}
+{% load static %}
+
+	<!--<link rel="icon" href="{% static 'dist/img/buildings.png' %}" type="image/gif" sizes="16x16"></link>-->
+
+
+
+
+  <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
+
+
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,Object.assign"></script>
+
+  <!-- ol-ext -->
+
+ <script type="text/javascript" src="https://unpkg.com/jsts@2.0.2/dist/jsts.min.js"></script>
+
+
+    <link rel="stylesheet" href="{% static 'dist/css/ol-buttons.css' %}">
+  <link rel="stylesheet" href="{% static 'dist/css/ol-layerswitcher.css' %}">
+  <!--<style>-->
+    <!--.ol-button i {-->
+      <!--color: inherit;-->
+    <!--}-->
+  <!--</style>-->
+
+<style>
+
+    .center {
+  margin: auto;
+  padding: 5px;
+  position:absolute;
+  z-index:100;
+  left:.5em;
+  top:.6em;
+  background-color:#ca2208;
+  border-radius:3px;
+  width:400px
+}
+.center:hover{
+
+  background-color:#ca2208;
+}
+.ol-scale-line{
+background:#ca2208;
+}
+  </style>
+<div>
+
+		{% block content %}
+		{% endblock %}
+
+</div>
+<script type="text/javascript" src="{% static 'dist/js/ol-map.js' %}"></script>
+  <script type="text/javascript" src="{% static 'dist/js/ol-controls.js' %}"></script>
+<script type="text/javascript" src="{% static 'dist/js/ol-layerswitcher.js' %}"></script>
+  <script type="text/javascript" src="{% static 'dist/js/ol-layer.js' %}"></script>
+ <script type="text/javascript" src="{% static 'dist/js/ol-measurement.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'dist/js/ol-advance-filter.js' %}"></script>
+ <script type="text/javascript" src="{% static 'dist/js/ol-buffer.js' %}"></script>
+
+
+
+  <link rel="stylesheet" href="{% static 'dist/css/ol-buffer-filter.css' %}">
+<link rel="stylesheet" href="{% static 'dist/css/ol-popup.css' %}">
+
+
+
+{% endblock %}
+

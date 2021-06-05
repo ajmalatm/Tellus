@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+
+<style>
+    .loginContainer {
+  background: url("../static/dist/images/login_image.png")
+  no-repeat center center fixed;
+  background-size: cover;
+  //height: 100%;
+  width: 100%;
+  position: absolute;
+}
+</style>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Demo</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="{% static 'dist/js/table2excel.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'dist/css/ol-search.css' %}">
+
+  <link rel="stylesheet" href="https://openlayers.org/en/latest/css/ol.css" />
+  <script type="text/javascript" src="https://openlayers.org/en/latest/build/ol.js"></script>
+
+
+  <link rel="stylesheet" href="{% static 'dist/css/ol-ext.css' %}">
+  <script type="text/javascript" src="{% static 'dist/js/ol-ext.js' %}"></script>
+
+
+    <!--&lt;!&ndash; https://github.com/MrRio/jsPDF &ndash;&gt;-->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+  <!--&lt;!&ndash; filesaver-js &ndash;&gt;-->
+  <script type="text/javascript" src="https://cdn.rawgit.com/eligrey/FileSaver.js/aa9f4e0e/FileSaver.min.js"></script>
+
+    <script type="text/javascript">
+		var user = '{{request.user}}';
+		function getToken(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = cookies[i].trim();
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+		var csrftoken = getToken('csrftoken')
+    </script>
+
+
+</head>
+    <!--<link rel="stylesheet" href="{% static 'dist/css/style.css' %}">-->
+  <!--<script type="text/javascript" src="https://openlayers.org/en/latest/build/ol.js"></script>-->
+<body class="loginContainer">
+
+      <div class="modal-body" style="display:none">
+        <form id="form">
+          {% csrf_token %}
+        </form>
+      </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="#">DEMO</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+        {% if user.is_staff %}
+      <li class="nav-item active">
+          <button class="btnMenu" id="btnDashboard"><i class="fa fa-digital-tachograph"></i></button>
+        <!--<a class="nav-link" href="http://localhost:8000/tellus/propsearch">Home <span class="sr-only">(current)</span></a>-->
+      </li>
+        {% endif %}
+        <li class="nav-item active">
+          <button class="btnMenu" id="btnSearch"><i class="fa fa-search"></i></button>
+        <!--<a class="nav-link" href="http://localhost:8000/tellus/propsearch">Home <span class="sr-only">(current)</span></a>-->
+      </li>
+        {% if user.is_staff %}
+          <li class="nav-item">
+              <button class="btnMenu" id="btnMap"><i class="fa fa-map"></i></button>
+            <!--<a class="nav-link" href="http://localhost:8000/tellus/">Map</a>-->
+          </li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+              <button class="btnMenu" id="btnUser"><i class="fa fa-user"></i></button>
+            <!--<a class="nav-link" href="http://localhost:8000/admin/">{{user}}</a>-->
+          </li>
+        {% endif %}
+
+      <li class="nav-item">
+
+
+    <datalist id="quicksearch">
+    </datalist>
+      <div>
+          <div class="quicksearchDiv" style="display:none">
+                <div class="dropdown" >
+                  <button class="btnsearchby btn dropdown-toggle" type="button" id="btnsearchby" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Search By
+                  </button>
+                  <div class="dropdown-menu"  id="quicksearchdrp" aria-labelledby="dropdownMenuButton">
+                      <a id="basefilterclear" class="dropdown-item" href="#">-------------</a>
+                  </div>
+                </div>
+                <input type="text" list="quicksearch" id="txtquicksearch"/>
+              <button id="btnsearchicon"><i class="fa fa-search" style="color:black;"></i></button>
+          </div>
+
+          <!--<button class="filter"><i class="fa fa-filter"></i></button>-->
+          <div id="container" >
+              <div id="exampleModal" class="ol-select ol-control" class="row" style="width:460px">
+              <div class="popuphead" style="margin:0;padding:4px;padding-left: 11px;"><span>Filter</span><button style="background-color: rgba(0, 60, 136, 0.5);color:white" class="closeButton" id="closefilter" >×</button></div>
+                  <div>
+                        <form id="form2">
+                                  {% csrf_token %}
+                                  <div class="form-group" id="advancedFilter">
+                                  <label for="drplayer">Select Layer</label>
+                                  <select name="drplayer" id="drplayer" class="form-control">
+                                    <option value="Select">--------</option>
+                                  </select>
+                                   <label for="filterForm"></label>
+                                  <fieldset id="filterForm" name="filterForm" class="form-inline">
+                                      <!--<label for="txtlat0">Latitude</label>-->
+                                      <!--<input type="number" value="0.0" name="txtlat0" id="txtlat0" style="width:100px">-->
+                                      <!--<label for="txtlong0">Longitude</label>-->
+                                      <!--<input type="number" value="0.0" name="txtlong0" id="txtlong0"  style="width:100px"><br>-->
+                                  </fieldset><br>
+                                   <input type="button"  name="add" value="Add a field" class="btn btn-danger" id="add" disabled="true" />
+                                    </div>
+                                </form>
+                                <button type="button" class="btn btn-outline-danger" id="btnClearFilter">Clear Filter</button>
+                                <button type="button" class="btn btn-danger" id="btnFilter">Ok</button>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
+      </li>
+    </ul>
+    <!--<form class="form-inline my-2 my-lg-0" style="display:none">-->
+      <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
+      <!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+    <!--</form>-->
+
+  </div>
+</nav>
+
+	{% if user.is_authenticated %}
+		{% block content2 %}
+
+		{% endblock %}
+	{% else %}
+		<script type="text/javascript">
+		window.location.href = "/login/";
+		</script>
+	{% endif %}
+
+</body>
+
+    <script type="text/javascript" src="{% static 'dist/js/menubar.js' %}"></script>
+
+</html>
+
+

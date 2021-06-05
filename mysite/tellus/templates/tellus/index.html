@@ -1,0 +1,255 @@
+{% extends 'tellus/base.html' %}
+
+{% block content %}
+<!-- Site wrapper -->
+{% load static %}
+
+<style>
+
+.ol-control.ol-select{
+top:60px;
+padding:0 0 2px 0;
+background-color:white;
+}
+.ol-control.ol-select > div{
+margin:10px;
+}
+.padding-bottom {
+        position: absolute;
+        top: 570px;
+        left: 0px;
+        width: 1000px;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+.ol-mouse-position{
+border: 1px solid #eee;
+color: #eee;
+    border-radius: 5px;
+    font-size:12px;
+    margin: 1px;
+    background-color: #ca2208;
+    top: auto;
+    transition: all .25s;
+    will-change: contents,width;
+    right: auto;
+    position: unset;
+    text-align: center;
+    width:130px;
+    height:23px;
+}
+
+.ol-control.ol-bar.ol-bottom{
+bottom: .16em;
+}
+
+.closeButton{
+-webkit-tap-highlight-color: transparent;
+user-select: none;
+pointer-events: auto;
+visibility: visible;
+box-sizing: border-box;
+font-family: inherit;
+line-height: inherit;
+overflow: visible;
+text-transform: none;
+border: 0;
+cursor: pointer;
+float: right;
+margin: 5px 5px 0 0;
+position: absolute;
+font-size: unset;
+right: 5px;
+top: 0;
+display: block;
+outline: none;
+padding: 0;
+background-color: rgba(0, 60, 136, 0.5);
+color: #fff;
+border-radius: 2px;
+width: 1.4em;
+height: 1.4em;
+}
+
+  input::-webkit-calendar-picker-indicator {
+              opacity: 0;
+           }
+
+   .measureResult{
+        padding-right:15px;
+        color:white
+        font-size:4px;
+    }
+    .label{display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: initial;
+    border-radius: .25em;}
+
+
+
+.textOverflow{
+    white-space: nowrap;
+    width: 100px;
+    overflow: hidden;
+    float: left;
+    text-overflow: ellipsis;
+    outline:none;
+    border:none;
+    background-color:#ca2208;
+    color:white;
+    cursor:pointer;
+}
+.textOverflow2{
+    white-space: nowrap;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    outline:none;
+    border:none;
+    color:white;
+    cursor:pointer;
+}
+.btnActive{
+background-color:blue;
+}
+
+.ol-legend {
+display:none;
+}
+
+.img canvas {
+      background-color: #fff;
+      width: 20px;
+    }
+
+#measurementModal{
+display:none;
+position:fixed;
+z-index:104;
+background-color:white;
+left:50%;
+top:60px}
+</style>
+
+
+
+<!--measurement popup-->
+
+<div id="measurementModal" class="row">
+    <div class="popuphead" style="margin:0;padding:4px;padding-left: 11px;"><span>Measure</span>
+        <button class="closeButton" id="closemeasure" >×</button>
+    </div>
+
+   <form class="form-inline">
+       <div class="form-group" style="padding:10px;width:auto">
+        <div class="dropdown">
+              <button id="btnsmeasureby" style="background-color:unset;color:grey" class="btn dropdown-toggle" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Length
+              </button>
+              <div class="dropdown-menu" id="measuredrp" aria-labelledby="dropdownMenuButton" style="text-align:center">
+                <a class="dropdown-item" href="#" label="Length">Length <i class="fa fa-arrows-alt-h"></i></a>
+                <a class="dropdown-item" href="#" label="Area">Area <i class="fa fa-square-full"></i></a>
+                <!--<a class="dropdown-item" href="#" label="Radius"><i class="fa fa-dot-circle-o"></i></a>-->
+
+              </div>
+        </div>
+            <!--<div class="ol-button ol-unselectable ol-control" style="position:relative">-->
+            <!--<button style="box-shadow: 0 1px 4px rgb(0 0 0 / 60%)"><i class="fa fa-home"></i></button>-->
+            <!--</div>-->
+           <!--<div class="ol-button ol-unselectable ol-control" style="position:relative">-->
+            <!--<button style="box-shadow: 0 1px 4px rgb(0 0 0 / 60%)"><i class="fa fa-home"></i></button>-->
+            <!--</div>-->
+            <!--<div class="ol-button ol-unselectable ol-control" style="position:relative">-->
+            <!--<button style="box-shadow: 0 1px 4px rgb(0 0 0 / 60%)"><i class="fa fa-home"></i></button>-->
+            <!--</div>-->
+       </div>
+        <div class="measureResult">
+                <span id="btnsmeasurebySpan">Length</span><span class="label label-default" style="background-color: #142240; margin: 3px;"><span id="measureout">0</span></span>
+        </div>
+
+
+   </form>
+</div>
+
+<select id="measuretype" style="display:none">
+    <option value="none">none</option>
+    <option value="Length">Length</option>
+    <option value="Area">Area</option>
+    <option value="Radius">Radius</option>
+</select>
+
+
+
+  <div class="container-fluid" style="padding:0">
+          <div id="map" style="width:100%; height:99.8vh;"></div>
+
+      <div class="row">
+          <div id="buffercontrol" class="fixed-bottom">
+
+                    <div class="col-sm-3">
+                          <div class="btn-group" role="group" aria-label="Basic example">
+                              <button type="button" class="btn btn-primary" id="btnbufferPoint" style="background-image: url('../../static/dist/images/point.png');background-repeat: no-repeat;background-position: center;"></button>
+                              <button type="button" class="btn btn-primary" id="btnbufferLine" style="background-image: url('../../static/dist/images/line.png');background-repeat: no-repeat;background-position: center;"></button>
+                              <button type="button" class="btn btn-primary" id="btnbufferPolygon" style="background-image: url('../../static/dist/images/polygon.png');background-repeat: no-repeat;background-position: center;"></button>
+                              <input id="bufferRadius" type="number" value="10" style="width:60px"/>
+                              <i class="fas fa-cloud-download-alt" style="cursor:pointer"></i>
+                          </div>
+                    </div>
+                    <div class="col-sm-8" id="buffercontrolResult" style="padding-right: 35px;">
+                            <div class="scrollmenu" id="buffercontrolList">
+                            </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <button class="closeButton" id="closebuffer">×</button>
+                    </div>
+
+              </div>
+          <div id="filteredTable" class="fixed-bottom">
+               <button class="closeButton" id="closefilteredTable">×</button>
+          </div>
+
+      </div>
+</div>
+
+
+<!--<div class="img" style="display: inline-block; vertical-align: middle; margin-right: .5em;" id="testimg"></div>-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+
+<div class="modal" tabindex="-1" role="dialog" id="dummyModal">
+  <div class="modal-dialog" role="document" style="max-width:90%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Table</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="display:inline">
+                    <div class="navbar-nav mr-auto" id="tbltabs" style="display:inline">
+                    </div>
+         <div id="tableList">
+
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

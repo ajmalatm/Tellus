@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="{% static 'dist/css/login/Login.css' %}">
+
+</head>
+<body class="loginContainer">
+
+
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <img src="https://cdn2.iconfinder.com/data/icons/font-awesome/1792/user-512.png" id="icon" alt="User Icon" />
+    </div>
+
+    <!-- Login Form -->
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" id="username"  value="{{cookie1}}" name="username" class="fadeIn second" name="username" placeholder="username">
+      <input type="password" id="password"  value="{{cookie2}}" name="password" class="fadeIn third" name="password" placeholder="password">
+      <button id="submit" type="submit" class="btn btn-danger fadeIn fourth">Sign In</button>
+        <div>
+			{% for message in messages %}
+				<p id="messages">{{message}}</p>
+			{% endfor %}
+          <!-- /.col -->
+          <div>
+			<input type="hidden" name="next" value="{{next}}"/>
+          </div>
+          <!-- /.col -->
+        </div>
+    </form>
+
+    <!-- Remind Passowrd -->
+    <br id="formFooter">
+      <input type="checkbox" id="remember_me" name="remember_me" value="true" >
+                  Remember Me
+      <a id="passwordreset" name="passwordreset" href="{% url 'reset_password' %}" class="underlineHover" href="#">Forgot Password?</a>
+    </div>
+
+  </div>
+</div>
+      <!--<div class="loginContainer">-->
+
+        <!--<div class="appTitle">DEMO</div>-->
+        <!--<div class="login">-->
+          <!--<form id="cpa-form" method="post"  style="margin-top:50px">-->
+            <!--{% csrf_token %}-->
+            <!--<div class="textFields">-->
+              <!--<input id="username" value="{{cookie1}}" name="username" type="text" placeholder="Username" class="loginText" >-->
+            <!--</div>-->
+            <!--<div class="textFields">-->
+              <!--<input id="password" value="{{cookie2}}" name="password" type="password" class="loginText" placeholder="Password">-->
+            <!--</div>-->
+
+        <!--<div>-->
+			<!--{% for message in messages %}-->
+				<!--<p id="messages">{{message}}</p>-->
+			<!--{% endfor %}-->
+            <!--<div>-->
+              <!--<div>-->
+                <!--<input type="checkbox" id="remember_me" name="remember_me" value="true" style="color:#2B2B2B;margin: 10px 0 10px 0px;paddingLeft:-12px !important" >-->
+                  <!--Remember Me-->
+              <!--</div>-->
+              <!--<div>-->
+                <!--<a id="passwordreset" name="passwordreset" href="{% url 'reset_password' %}" style="top:20px;color:var(&#45;&#45;widgethover);textDecoration: none">Forgot Password?</a>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--&lt;!&ndash; /.col &ndash;&gt;-->
+          <!--<div>-->
+            <!--<button id="submit" type="submit" class="loginButton">Sign In</button>-->
+			<!--<input type="hidden" name="next" value="{{next}}"/>-->
+          <!--</div>-->
+          <!--&lt;!&ndash; /.col &ndash;&gt;-->
+        <!--</div>-->
+
+          <!--</form>-->
+        <!--</div>-->
+      <!--</div>-->
+
+{% endblock %}
+
+</body>
+</html>
+
+
+
+
+
+
+
